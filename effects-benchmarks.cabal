@@ -13,7 +13,7 @@ extra-source-files:  README.md
 
 common shared
   default-language:    Haskell2010
-  ghc-options:         -Wall -Werror -O2
+  ghc-options:         -Wall -O2
   build-depends:       base >= 4.7 && < 5
 
 library benchmark-signatures
@@ -73,6 +73,17 @@ library instances-for-polysemy
                  , Poly.HTTP
   build-depends:   polysemy ^>= 0.1.2
 
+library instances-for-implicit-effects
+  import:          shared
+  hs-source-dirs:  instances
+  exposed-modules: Implicit.HTTP
+                 , Implicit.Stateful
+                 , Implicit.StatefulExcept
+  other-modules:   Implicit.Comp
+  build-depends:   implicit-effects
+               ,   mtl
+               ,   transformers
+
 benchmark effects-benchmarks
   import:         shared
   type:           exitcode-stdio-1.0
@@ -80,6 +91,7 @@ benchmark effects-benchmarks
   build-depends:  benchmark-signatures
                 , instances-for-mtl
                 , instances-for-fused-effects
+                , instances-for-implicit-effects
                 , instances-for-freer-simple
                 , instances-for-polysemy
                 , instances-for-shallow
@@ -95,3 +107,4 @@ benchmark effects-benchmarks
                 , benchmark-signatures (Bench.Countdown as Shallow.Countdown, Bench.HTTP as Shallow.HTTPM) requires (Bench.Signature.Stateful as Shallow.Stateful, Bench.Signature.StatefulExcept as Shallow.StatefulExcept, Bench.Signature.HTTP as Shallow.HTTP)
                 , benchmark-signatures (Bench.Countdown as Poly.Countdown, Bench.HTTP as Poly.HTTPM) requires (Bench.Signature.Stateful as Poly.Stateful, Bench.Signature.StatefulExcept as Poly.StatefulExcept, Bench.Signature.HTTP as Poly.HTTP)
                 , benchmark-signatures (Bench.Countdown as ExtEff.Countdown, Bench.HTTP as ExtEff.HTTPM) requires (Bench.Signature.Stateful as ExtEff.Stateful, Bench.Signature.StatefulExcept as ExtEff.StatefulExcept, Bench.Signature.HTTP as ExtEff.HTTP)
+                , benchmark-signatures (Bench.Countdown as Implicit.Countdown, Bench.HTTP as Implicit.HTTPM) requires (Bench.Signature.Stateful as Implicit.Stateful, Bench.Signature.StatefulExcept as Implicit.StatefulExcept, Bench.Signature.HTTP as Implicit.HTTP)

@@ -12,6 +12,7 @@ import qualified Shallow.Countdown as Shallow
 import qualified MTL.Countdown as MTL
 import qualified Poly.Countdown as Poly
 import qualified ExtEff.Countdown as ExtEff
+import qualified Implicit.Countdown as Implicit
 
 import qualified Fused.HTTPM as Fused
 import qualified Simple.HTTPM as Simple
@@ -19,12 +20,14 @@ import qualified MTL.HTTPM as MTL
 import qualified Shallow.HTTPM as Shallow
 import qualified Poly.HTTPM as Poly
 import qualified ExtEff.HTTPM as ExtEff
+import qualified Implicit.HTTPM as Implicit
 
 #define MEMSUITE(nam,v) sequence_ [ Weigh.func "fused-effects" Fused.nam v \
                         , Weigh.func "mtl" MTL.nam v \
                         , Weigh.func "polysemy" Poly.nam v \
                         , Weigh.func "freer-simple" Simple.nam v \
                         , Weigh.func "extensible-effects" ExtEff.nam v \
+                        , Weigh.func "implicit-effects" Implicit.nam v \
                         , Weigh.func "shallow" Shallow.nam v ]
 
 #define SUITE(nam,v) [ bench "fused-effects" (nf Fused.nam v) \
@@ -32,6 +35,7 @@ import qualified ExtEff.HTTPM as ExtEff
                      , bench "polysemy" (nf Poly.nam v) \
                      , bench "freer-simple" (nf Simple.nam v) \
                      , bench "extensible-effects" (nf ExtEff.nam v) \
+                     , bench "implicit-effects" (nf Implicit.nam v) \
                      , bench "shallow" (nf Shallow.nam v) ]
 
 wruns :: Int
@@ -53,6 +57,7 @@ main = do
       [ bench "fused-effects" (nfAppIO Fused.doHTTP runs)
       , bench "polysemy" (nfAppIO Poly.doHTTP runs)
       , bench "extensible-effects" (nfAppIO ExtEff.doHTTP runs)
+      , bench "implicit-effects" (nfAppIO Implicit.doHTTP runs)
       , bench "Deep embedding" (nfAppIO MTL.doHTTP runs)
       , bench "Shallow embedding" (nfAppIO Shallow.doHTTP runs)
       , bench "freer-simple" (nfAppIO Simple.doHTTP runs)
