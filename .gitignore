@@ -2,3 +2,4 @@
 .DS_Store
 core-html/
 dist-newstyle/
+.ghc.environment.*
