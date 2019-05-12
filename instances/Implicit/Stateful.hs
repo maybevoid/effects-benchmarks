@@ -14,9 +14,7 @@ import Control.Effect.Implicit.Ops.State
   ( StateEff
   )
 
-import Data.Tuple (swap)
 import Control.Monad.Identity
-import Control.Monad.Trans.State.Strict (runStateT)
 
 import qualified Control.Effect.Implicit.Ops.State as ST
 
@@ -29,5 +27,10 @@ put :: Int -> StateM ()
 put x = CompM $ ST.put x
 
 runStateful :: forall a . Int -> StateM a -> (Int, a)
-runStateful s (CompM comp) = swap $ runIdentity $
-  runStateT (withOps stateTOps comp) s
+runStateful s (CompM comp) =
+  runIdentity $
+  withStateTAndOps @NoEff s $
+  do
+    x <- comp
+    s' <- ST.get
+    return (s', x)
